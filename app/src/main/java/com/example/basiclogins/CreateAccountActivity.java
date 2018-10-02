@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class CreateAccountActivity extends AppCompatActivity {
 
@@ -30,7 +31,11 @@ public class CreateAccountActivity extends AppCompatActivity {
         buttonCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendInfo();
+                if (editTextName.getText().toString().equals("") || editTextName.getText().toString().equals("") || editTextName.getText().toString().equals("") || editTextName.getText().toString().equals("") || editTextName.getText().toString().equals("")) {
+                    Toast.makeText(CreateAccountActivity.this, "Please enter all the required information", Toast.LENGTH_SHORT).show();
+                } else {
+                    sendInfo();
+                }
             }
         });
 
@@ -38,8 +43,8 @@ public class CreateAccountActivity extends AppCompatActivity {
 
     private void sendInfo() {
         Intent intent = new Intent();
-        intent.putExtra(editTextUsername.getText().toString());
-        intent.putExtra(editTextPassword.getText().toString());
+        intent.putExtra("hello", editTextUsername.getText().toString());
+        intent.putExtra("hi", editTextPassword.getText().toString());
         setResult(RESULT_OK, intent);
         finish();
     }

@@ -28,7 +28,11 @@ public class LoginActivity extends AppCompatActivity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "Coming Soon!", Toast.LENGTH_SHORT).show();
+                if (editTextUsername.getText().toString().equals("")) {
+                    Toast.makeText(LoginActivity.this, "Please Enter A Username", Toast.LENGTH_SHORT).show();
+                } else if (editTextPassword.getText().toString().equals("")) {
+                    Toast.makeText(LoginActivity.this, "Please Enter A Password", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -48,7 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         textViewCreate = findViewById(R.id.textView_login_create);
     }
 
-    private void startActivity(){
+    private void startActivity() {
         Intent intent = new Intent(this, CreateAccountActivity.class);
         String message = editTextUsername.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, message);
@@ -59,9 +63,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == REQUEST){
             if(resultCode == RESULT_OK){
-                data = getIntent();
-                String username = data.getStringExtra(CreateAccountActivity.editTextUsername);
-                String password = data.getStringExtra(CreateAccountActivity.EXTRA_MESSAGE1);
+                String username = data.getStringExtra("hello");
+                String password = data.getStringExtra("hi");
                 editTextUsername.setText(username);
                 editTextPassword.setText(password);
             }
