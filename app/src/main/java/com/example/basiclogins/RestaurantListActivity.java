@@ -1,9 +1,12 @@
 package com.example.basiclogins;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,6 +26,14 @@ public class RestaurantListActivity extends AppCompatActivity {
 
         wireWidgets();
         populateListview();
+        listViewRestaurants.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(RestaurantListActivity.this, RestaurantActivity.class);
+                intent.putExtra("position", position);
+                startActivity(intent);
+            }
+        });
     }
 
     private void populateListview() {
@@ -31,9 +42,7 @@ public class RestaurantListActivity extends AppCompatActivity {
             public void handleResponse( List<Restaurant> restaurantList )
             {
                 // all restaurant instances have been found
-                ArrayAdapter<Restaurant> adapter = new ArrayAdapter<>(
-                        RestaurantListActivity.this, android.R.layout.simple_list_item_1, restaurantList
-                );
+                RestaurantAdapter adapter = new RestaurantAdapter(RestaurantListActivity.this, R.layout.item_restaurantlist, restaurantList);
                 listViewRestaurants.setAdapter(adapter);
             }
             @Override

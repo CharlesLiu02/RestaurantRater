@@ -4,7 +4,7 @@ public class Restaurant {
     //name, cuisine, rating, link to website/yelp, price, address
     private String name;
     private String cuisine;
-    private Double rating; // .5 - > 1 increments of .5
+    private float rating; // .5 - > 1 increments of .5
     private String websitelink;
     private String address;
     private int price; //1 -> 5 increments of one
@@ -13,7 +13,7 @@ public class Restaurant {
     public Restaurant() {
     }
 
-    public Restaurant(String name, String cuisine, Double rating, String websitelink, String address, int price) {
+    public Restaurant(String name, String cuisine, float rating, String websitelink, String address, int price) {
         this.name = name;
         this.cuisine = cuisine;
         this.rating = rating;
@@ -38,11 +38,11 @@ public class Restaurant {
         this.cuisine = cuisine;
     }
 
-    public Double getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 

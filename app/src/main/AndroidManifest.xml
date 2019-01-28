@@ -25,7 +25,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".CreateAccountActivity" />
         </activity>
-        <activity android:name=".RestaurantListActivity"></activity>
+        <activity android:name=".RestaurantListActivity" />
+        <activity android:name=".RestaurantActivity"></activity>
     </application>
 
 </manifest>
