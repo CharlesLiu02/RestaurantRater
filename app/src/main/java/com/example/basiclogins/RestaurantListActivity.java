@@ -1,6 +1,7 @@
 package com.example.basiclogins;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,18 +20,18 @@ import java.util.List;
 
 public class RestaurantListActivity extends AppCompatActivity {
     private ListView listViewRestaurants;
+    private FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant_list);
 
         wireWidgets();
-        populateListview();
-        listViewRestaurants.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
                 Intent intent = new Intent(RestaurantListActivity.this, RestaurantActivity.class);
-                intent.putExtra("position", position);
                 startActivity(intent);
             }
         });
@@ -56,5 +57,12 @@ public class RestaurantListActivity extends AppCompatActivity {
 
     private void wireWidgets() {
         listViewRestaurants = findViewById(R.id.listview_restaurantlistview);
+        fab = findViewById(R.id.fab_restaurantlist_new);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        populateListview();
     }
 }
