@@ -24,6 +24,7 @@ public class RestaurantActivity extends AppCompatActivity {
     private RatingBar ratingBarRating;
     private SeekBar seekBarPrice;
     private Button buttonCreate;
+    private Restaurant restaurant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,24 +38,43 @@ public class RestaurantActivity extends AppCompatActivity {
                 createNewRestaurant();
             }
         });
+        prefillFields();
+    }
+
+    private void prefillFields() {
+        //check if there's an intent
+        //if so, fill all the fields with the restaurant
+        Intent restaurantIntent = getIntent();
+        restaurant = restaurantIntent.getParcelableExtra(RestaurantListActivity.EXTRA_RESTAURANT);
+        if(restaurant != null){
+            editTextName.setText(restaurant.getName());
+            editTextCuisine.setText(restaurant.getCuisine());
+            editTextAddress.setText(restaurant.getAddress());
+            editTextWebsite.setText(restaurant.getWebsiteLink());
+            ratingBarRating.setRating(restaurant.getRating());
+            seekBarPrice.setProgress(restaurant.getPrice());
+        }
     }
 
     private void createNewRestaurant() {
         if(allFieldsVerified()) {
-            Restaurant restaurant = new Restaurant();
             String name = editTextName.getText().toString();
             String cuisine = editTextCuisine.getText().toString();
             String address = editTextAddress.getText().toString();
             String website = editTextWebsite.getText().toString();
             int price = seekBarPrice.getProgress() + 1;
             float rating = ratingBarRating.getRating();
-            restaurant.setName(name);
-            restaurant.setCuisine(cuisine);
-            restaurant.setAddress(address);
-            restaurant.setWebsitelink(website);
-            restaurant.setPrice(price);
-            restaurant.setRating(rating);
-            Backendless.Persistence.save(restaurant, new AsyncCallback<Restaurant>() {
+            if(restaurant != null){ //already have ownerId and objectId
+                restaurant.setName(name);
+                restaurant.setCuisine(cuisine);
+                restaurant.setAddress(address);
+                restaurant.setWebsiteLink(website);
+                restaurant.setPrice(price);
+                restaurant.setRating(rating);
+            }else{
+                restaurant = new Restaurant(name, cuisine, rating, website, address, price);
+            }
+            Backendless.Persistence.of(Restaurant.class).save(restaurant, new AsyncCallback<Restaurant>() {
                 public void handleResponse(Restaurant restaurant) {
                     // new restaurant instance has been saved
                     finish();
