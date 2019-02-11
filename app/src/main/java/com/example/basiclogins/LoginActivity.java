@@ -3,6 +3,7 @@ package com.example.basiclogins;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,6 +48,28 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
+
+        checkLogin();
+    }
+
+    private void checkLogin() {
+        AsyncCallback<Boolean> isValidLoginCallback = new AsyncCallback<Boolean>()
+        {
+            @Override
+            public void handleResponse( Boolean response )
+            {
+                Log.e( "MYAPP", "[ASYNC] Is login valid? - " + response );
+            }
+
+            @Override
+            public void handleFault( BackendlessFault fault )
+            {
+                Log.e( "MYAPP", "Error - " + fault );
+            }
+
+        };
+
+        Backendless.UserService.isValidLogin( isValidLoginCallback );
     }
 
     private void loginToBackendless() {
@@ -59,13 +82,14 @@ public class LoginActivity extends AppCompatActivity {
                 //called when login is complete and successful
                 Intent intent = new Intent(LoginActivity.this, RestaurantListActivity.class);
                 startActivity(intent);
+                finish();
             }
 
             @Override
             public void handleFault(BackendlessFault fault) {
                 Toast.makeText(LoginActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        });
+        }, true);
     }
 
     private void wireWidgets() {

@@ -7,6 +7,16 @@
     tools:context=".CreateAccountActivity"
     tools:layout_editor_absoluteY="81dp">
 
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="67dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/editText_create_name"
         android:layout_width="wrap_content"
@@ -18,7 +28,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <EditText
         android:id="@+id/editText_create_username"

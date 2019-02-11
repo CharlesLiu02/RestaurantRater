@@ -4,18 +4,17 @@ import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
@@ -28,6 +27,7 @@ public class RestaurantListActivity extends AppCompatActivity {
     private ListView listViewRestaurants;
     private FloatingActionButton fab;
     private RestaurantAdapter adapter;
+    private Toolbar toolbar;
     public static final String EXTRA_RESTAURANT = "restaurant";
 
     @Override
@@ -36,6 +36,7 @@ public class RestaurantListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_restaurant_list);
 
         wireWidgets();
+        setSupportActionBar(toolbar);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,12 +48,36 @@ public class RestaurantListActivity extends AppCompatActivity {
         registerForContextMenu(listViewRestaurants);
     }
 
+    private void logoutUser() {
+        Backendless.UserService.logout( new AsyncCallback<Void>()
+        {
+            public void handleResponse( Void response )
+            {
+                // user has been logged out.
+                Intent intent = new Intent(RestaurantListActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+
+            public void handleFault( BackendlessFault fault )
+            {
+                // something went wrong and logout failed, to get the error code call fault.getCode()
+                Toast.makeText(RestaurantListActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_restaurant_list, menu);
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_toolbar, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -65,6 +90,17 @@ public class RestaurantListActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_toolbar_logout:
+                logoutUser();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -84,8 +120,6 @@ public class RestaurantListActivity extends AppCompatActivity {
                     }
                 });
     }
-
-
 
     private void populateListview() {
         //refactor to only get the items that belong to the user
@@ -128,6 +162,7 @@ public class RestaurantListActivity extends AppCompatActivity {
     private void wireWidgets() {
         listViewRestaurants = findViewById(R.id.listview_restaurantlistview);
         fab = findViewById(R.id.fab_restaurantlist_new);
+        toolbar = findViewById(R.id.toolbar);
     }
 
     @Override
