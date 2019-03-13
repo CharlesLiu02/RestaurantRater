@@ -1,22 +1,20 @@
 package com.example.basiclogins;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
+
 import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.DataQueryBuilder;
@@ -87,6 +85,7 @@ public class RestaurantListActivity extends AppCompatActivity {
             case R.id.menu_restaurant_list_delete:
                 Restaurant restaurant = (Restaurant) listViewRestaurants.getItemAtPosition(info.position);
                 deleteRestaurant(restaurant);
+                populateListview();
                 return true;
             default:
                 return super.onContextItemSelected(item);
@@ -104,13 +103,12 @@ public class RestaurantListActivity extends AppCompatActivity {
         }
     }
 
-    private void deleteRestaurant(Restaurant restaurant) {
+    private void deleteRestaurant(final Restaurant restaurant) {
         Backendless.Persistence.of(Restaurant.class).remove(restaurant,
                 new AsyncCallback<Long>() {
                     public void handleResponse(Long response) {
                         // Contact has been deleted. The response is the
                         // time in milliseconds when the object was deleted
-                        adapter.notifyDataSetChanged();
                     }
 
                     public void handleFault(BackendlessFault fault) {
@@ -119,6 +117,7 @@ public class RestaurantListActivity extends AppCompatActivity {
                         Toast.makeText(RestaurantListActivity.this, fault.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
+        adapter.notifyDataSetChanged();
     }
 
     private void populateListview() {
